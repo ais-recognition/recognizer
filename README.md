@@ -4,7 +4,7 @@ Recognize Speakers and Publish Results
 ## To Do
 - [x] surgemq based MQTT broker
 - [x] test publish/subscribe message
-- [x] recognition in sub-thread with voice file specified in message payload
+- [x] recognition in new thread with voice file specified in message payload
 - [ ] acquire file and submit to worker with message published
 
 ## References
