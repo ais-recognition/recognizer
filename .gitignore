@@ -2,3 +2,5 @@ voiceDB/
 .idea
 *.DS_Store
 *.pyc
+*.seg
+*.wav
