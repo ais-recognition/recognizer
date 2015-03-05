@@ -11,13 +11,6 @@ import (
 )
 
 var (
-	// keepAlive        int
-	// connectTimeout   int
-	// ackTimeout       int
-	// timeoutRetries   int
-	// authenticator    string
-	// sessionsProvider string
-	// topicsProvider   string
 	cpuprofile       string
 )
 
