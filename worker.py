@@ -8,8 +8,8 @@ from voiceid.sr import Voiceid
 from voiceid.sr import Cluster
 from voiceid.db import GMMVoiceDB
 
-NEW_VOICE_TOPIC = "ais/recognize/voice"
-SET_NAME_TOPIC = "ais/recognize/setname/#"
+NEW_VOICE_TOPIC = "ais/recognize/voice/+"
+SET_NAME_TOPIC = "ais/recognize/setname/+"
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, rc):
     print("Connected with result code "+str(rc))
@@ -18,11 +18,17 @@ def on_connect(client, userdata, rc):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
-    if msg.topic == NEW_VOICE_TOPIC:
+    if client.topic_matches_sub(NEW_VOICE_TOPIC, msg.topic):
         thread.start_new_thread(recognize, (msg.payload, ))
-    elif msg.topic.startswith(SET_NAME_TOPIC[0: -1]):
-        voice_path = msg.topic.split("/")[-1]
-        thread.start_new_thread(set_name, (voice_path, msg.payload))
+    elif client.topic_matches_sub(SET_NAME_TOPIC, msg.topic):
+        path_and_name = msg.payload.split("=", 1)
+        if len(path_and_name) < 2:
+            client.publish("ais/recognize/err", "name")
+            return
+        device_id = msg.topic.split("/")[-1]
+        voice_path = path_and_name[0]
+        name = path_and_name[1]
+        thread.start_new_thread(set_name, (voice_path, name))
 
 def set_name(voice_path, new_name):
     print "set " + voice_path + " to: " + new_name
