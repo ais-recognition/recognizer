@@ -72,6 +72,7 @@ def recognize(voice_path):
             client.publish("ais/recognize/unknown", voice_path)
         else:
             print speaker
+            client.publish("ais/recognize/result", speaker)
         os.remove(voice.get_file_basename() + '.seg')
         os.remove(voice.get_file_basename() + '.g.seg')
         os.remove(voice.get_file_basename() + '.s.seg')
