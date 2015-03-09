@@ -5,7 +5,11 @@ Recognize Speakers and Publish Results
 - [x] surgemq based MQTT broker
 - [x] test publish/subscribe message
 - [x] recognition in new thread with voice file specified in message payload
-- [ ] acquire file and submit to worker with message published
+- [x] train speakers model with given voice
+- [x] test recognition of trained model
+- [ ] handle name duplicates
+- [ ] handle name whitespace
+- [ ] message retain
 
 ## References
 * voiceid: https://code.google.com/p/voiceid/
