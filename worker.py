@@ -19,7 +19,10 @@ def on_connect(client, userdata, rc):
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
     if client.topic_matches_sub(NEW_VOICE_TOPIC, msg.topic):
+        # payload is less than 256M
+        # payload is bytearray or string: http://git.eclipse.org/c/paho/org.eclipse.paho.mqtt.python.git/tree/src/paho/mqtt/client.py
         thread.start_new_thread(recognize, (msg.payload, ))
+
     elif client.topic_matches_sub(SET_NAME_TOPIC, msg.topic):
         path_and_name = msg.payload.split("=", 1)
         if len(path_and_name) < 2:

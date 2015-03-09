@@ -1,7 +1,7 @@
 import paho.mqtt.client as mqtt
 
 def on_connect(client, userdata, rc):
-    print("Connected with result code "+str(rc))
+    print "Connected with result code " + str(rc)
     client.subscribe("ais/recognize/result/#")
     client.publish("ais/recognize/voice/mock-speaker", "")
 
