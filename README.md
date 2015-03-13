@@ -1,4 +1,4 @@
-# RecognitionBroker
+## Introduction
 Recognize Speakers and Publish Results
 
 ## Messages Structure
