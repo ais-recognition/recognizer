@@ -19,6 +19,8 @@ def on_connect(client, userdata, rc):
 def on_message(client, userdata, msg):
     print msg.topic
     print msg.payload
+
+    device_id = msg.topic.split("/")[-1]
     if mqtt.topic_matches_sub(NEW_VOICE_TOPIC, msg.topic):
         file_name = str(msg.timestamp) + '.m4a'
         new_voice = open(file_name, 'wb')
@@ -26,19 +28,18 @@ def on_message(client, userdata, msg):
         new_voice.close()
         # payload is less than 256M
         # payload is bytearray or string: http://git.eclipse.org/c/paho/org.eclipse.paho.mqtt.python.git/tree/src/paho/mqtt/client.py
-        thread.start_new_thread(recognize, (file_name, ))
+        thread.start_new_thread(recognize, (device_id, file_name))
 
     elif mqtt.topic_matches_sub(SET_NAME_TOPIC, msg.topic):
         path_and_name = msg.payload.split("=", 1)
         if len(path_and_name) < 2:
             client.publish("ais/recognize/err", "name")
             return
-        device_id = msg.topic.split("/")[-1]
         voice_path = path_and_name[0]
         name = path_and_name[1]
-        thread.start_new_thread(set_name, (voice_path, name))
+        thread.start_new_thread(set_name, (device_id, voice_path, name))
 
-def set_name(voice_path, new_name):
+def set_name(device_id, voice_path, new_name):
     print "set " + voice_path + " to: " + new_name
     try:
         # voice = Voiceid(db, voice_path, single=True)
@@ -62,7 +63,7 @@ def set_name(voice_path, new_name):
     except OSError:
         print "WARNING: error deleting some intermediate files"
 
-def recognize(voice_path):
+def recognize(device_id, voice_path):
     # voice_db_lock.acquire()
     print db.get_speakers()
     # assume only one speaker in one sample, To Do: multiple speakers in one sample
@@ -77,10 +78,10 @@ def recognize(voice_path):
         # speaker = cluster.get_speaker()
         if speaker == "unknown":
             print "need name"
-            client.publish("ais/recognize/unknown", voice_path)
+            client.publish("ais/recognize/unknown/" + device_id, voice_path)
         else:
             print speaker
-            client.publish("ais/recognize/result", speaker)
+            client.publish("ais/recognize/result/" + device_id, speaker)
         os.remove(voice.get_file_basename() + '.seg')
         os.remove(voice.get_file_basename() + '.g.seg')
         os.remove(voice.get_file_basename() + '.s.seg')
