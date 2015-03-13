@@ -4,3 +4,6 @@ voiceDB/
 *.pyc
 *.seg
 *.wav
+*.m4a
+!cyn.m4a
+!jyz.m4a

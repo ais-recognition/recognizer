@@ -8,8 +8,8 @@ Recognize Speakers and Publish Results
 - [x] train speakers model with given voice
 - [x] test recognition of trained model
 - [ ] voice transfer by mqtt payload?(try..)
-    - [ ] receive bytearray(sent by mock-speaker), save to file
-    - [ ] pass the file to GStreamer(restricted by the implementation of voiceid)
+    - [x] receive bytearray(sent by mock-speaker), save to file
+    - [x] pass the file to GStreamer(restricted by the implementation of voiceid)
     - [ ] receive bytearray sent from iOS client
 - [ ] handle name duplicates
 - [ ] handle name whitespace
