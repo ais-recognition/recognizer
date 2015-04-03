@@ -19,6 +19,7 @@ Recognize Speakers and Publish Results
     - [x] receive bytearray(sent by mock-speaker), save to file
     - [x] pass the file to GStreamer(restricted by the implementation of voiceid)
     - [ ] receive bytearray sent from iOS client
+- [ ] rewrite the method to add/modify voice model! 
 - [ ] handle name duplicates
 - [ ] handle name whitespace
 - [ ] message retain
