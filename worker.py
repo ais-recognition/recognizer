@@ -18,7 +18,7 @@ def on_connect(client, userdata, rc):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
     print msg.topic
-    print msg.payload
+    # print msg.payload
 
     device_id = msg.topic.split("/")[-1]
     if mqtt.topic_matches_sub(NEW_VOICE_TOPIC, msg.topic):
@@ -62,6 +62,8 @@ def set_name(device_id, voice_path, new_name):
         print "voice file doesn't exist"
     except OSError:
         print "WARNING: error deleting some intermediate files"
+    except TypeError:
+        print "Type error"
 
 def recognize(device_id, voice_path):
     # voice_db_lock.acquire()
