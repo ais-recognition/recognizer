@@ -21,7 +21,7 @@ Recognize Speakers and Publish Results
     - [x] receive bytearray sent from iOS client
 - [x] rewrite the method to add/modify voice model! 
     - [x] merge voice models of single speaker
-- [ ] post to server
+- [x] post to server
 - [ ] handle name whitespace
 - [ ] message retain
 

@@ -2,6 +2,8 @@ import thread
 import os
 import threading
 import shutil
+import requests
+import json
 import paho.mqtt.client as mqtt
 from voiceid import fm
 from voiceid.sr import Voiceid
@@ -10,6 +12,8 @@ from voiceid.db import GMMVoiceDB
 
 NEW_VOICE_TOPIC = "ais/recognize/voice/+"
 SET_NAME_TOPIC = "ais/recognize/setname/+"
+HEADERS = {'Content-Type': 'application/json'}
+
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, rc):
     print("Connected with result code "+str(rc))
@@ -92,6 +96,8 @@ def recognize(device_id, voice_path):
         # speaker = cluster.get_speaker()
 
         print speaker
+        payload = {'audio': 'http://52.24.205.33/voice/' + voice_path, 'userName': speaker}
+        requests.post('http://129.236.234.21:8080/message', data=json.dumps(payload), headers=HEADERS)
         client.publish("ais/recognize/result/" + device_id + "/" + voice_path, speaker)
         os.remove(voice.get_file_basename() + '.seg')
         os.remove(voice.get_file_basename() + '.g.seg')

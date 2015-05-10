@@ -1,4 +1,4 @@
-voiceDB/
+!voiceDB/
 .idea
 *.DS_Store
 *.pyc
