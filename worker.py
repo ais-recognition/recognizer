@@ -96,7 +96,7 @@ def recognize(device_id, voice_path):
         # speaker = cluster.get_speaker()
 
         print speaker
-        payload = {'audio': 'http://52.24.205.33/voice/' + voice_path, 'userName': speaker}
+        payload = {'audio': 'http://52.24.205.33/voice/' + voice_path, 'userName': speaker, 'time': '1'}
         requests.post('http://129.236.234.21:8080/message', data=json.dumps(payload), headers=HEADERS)
         client.publish("ais/recognize/result/" + device_id + "/" + voice_path, speaker)
         os.remove(voice.get_file_basename() + '.seg')
