@@ -6,8 +6,7 @@ Recognize Speakers and Publish Results
 |:-------------------|:---------------------------------------|:------------------|
 | recognize          | ais/recognize/voice/+device_id         | bytes of voice    |
 | set name           | ais/recognize/setname/+device_id       | "audio_path=name" |
-| recognition result | ais/recognize/result/+device_id/+audio_path  | "speaker_name"    |
-| voice unknown      | ais/recognize/unknown/+device_id | "audio_path"      |
+| recognition result | ais/recognize/result/+device_id/+audio_path  | "speaker_name" or "unknown"    |
 
 ## Tasks
 - [x] surgemq based MQTT broker
