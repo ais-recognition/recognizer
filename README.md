@@ -6,7 +6,7 @@ Recognize Speakers and Publish Results
 |:-------------------|:---------------------------------------|:------------------|
 | recognize          | ais/recognize/voice/+device_id         | bytes of voice    |
 | set name           | ais/recognize/setname/+device_id       | "audio_path=name" |
-| recognition result | ais/recognize/result/+device_id  | "speaker_name"    |
+| recognition result | ais/recognize/result/+device_id/+audio_path  | "speaker_name"    |
 | voice unknown      | ais/recognize/unknown/+device_id | "audio_path"      |
 
 ## Tasks
@@ -15,12 +15,13 @@ Recognize Speakers and Publish Results
 - [x] recognition in new thread with voice file specified in message payload
 - [x] train speakers model with given voice
 - [x] test recognition of trained model
-- [ ] voice transfer by mqtt payload?(try..)
+- [x] voice transfer by mqtt payload?(try..)
     - [x] receive bytearray(sent by mock-speaker), save to file
     - [x] pass the file to GStreamer(restricted by the implementation of voiceid)
-    - [ ] receive bytearray sent from iOS client
-- [ ] rewrite the method to add/modify voice model! 
-- [ ] handle name duplicates
+    - [x] receive bytearray sent from iOS client
+- [x] rewrite the method to add/modify voice model! 
+    - [x] merge voice models of single speaker
+- [ ] post to server
 - [ ] handle name whitespace
 - [ ] message retain
 

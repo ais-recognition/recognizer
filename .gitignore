@@ -6,5 +6,7 @@ voiceDB/
 *.wav
 *.m4a
 *.gmm
+*.gmms
+*.srt
 !cyn.m4a
 !jyz.m4a

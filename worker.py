@@ -21,6 +21,8 @@ def on_message(client, userdata, msg):
     # print msg.payload
 
     device_id = msg.topic.split("/")[-1]
+    if device_id == "test_id":
+        return
     if mqtt.topic_matches_sub(NEW_VOICE_TOPIC, msg.topic):
         file_name = str(msg.timestamp) + '.m4a'
         new_voice = open(file_name, 'wb')
@@ -41,19 +43,23 @@ def on_message(client, userdata, msg):
 
 def set_name(device_id, voice_path, new_name):
     print "set " + voice_path + " to: " + new_name
+    new_name = new_name.replace(' ', '')
+    if not new_name.isalnum():
+        print 'error: SPEAKER_ID must be alphanumeric'
+        return
+    if new_name in db.get_speakers()['U'] or new_name in db.get_speakers()['M'] or new_name in db.get_speakers()['F']:
+        voice = Voiceid(db, voice_path, single=True)
+        voice.extract_speakers(quiet=True, thrd_n=3)
+
+        cluster = voice.get_cluster('S0')
+        cluster.set_speaker(new_name)
+        voice.update_db()
+        return
     try:
-        # voice = Voiceid(db, voice_path, single=True)
-        # voice.extract_speakers(thrd_n=5)
-        # cluster = voice.get_cluster('S0')
-        # cluster.set_speaker(new_name)
-        # voice.update_db()
-        # To Do: replace whitespace to path special character
-        if not new_name.isalnum():
-            print 'error: SPEAKER_ID must be alphanumeric'
-            exit(1)
         # assume only one speaker in one sample
         ww = fm.file2wav(voice_path)
         file_basename, extension = os.path.splitext(ww)
+
         db.add_model(file_basename, new_name)
         os.remove(file_basename + ".seg")
         os.remove(file_basename + ".ident.seg")
@@ -76,14 +82,17 @@ def recognize(device_id, voice_path):
         voice.extract_speakers(quiet=True, thrd_n=3)
         # clusters = voice.get_clusters()
         cluster = voice.get_cluster('S0')
-        speaker = cluster.get_best_speaker()
+        # speaker = cluster.get_best_speaker()
+        speaker = "unknown"
+        speakers = cluster.get_best_five()
+        if len(speakers) > 0:
+            value = speakers[0][1]
+            if value > -33.0:
+                speaker = speakers[0][0]
         # speaker = cluster.get_speaker()
-        if speaker == "unknown":
-            print "need name"
-            client.publish("ais/recognize/unknown/" + device_id, voice_path)
-        else:
-            print speaker
-            client.publish("ais/recognize/result/" + device_id, speaker)
+
+        print speaker
+        client.publish("ais/recognize/result/" + device_id + "/" + voice_path, speaker)
         os.remove(voice.get_file_basename() + '.seg')
         os.remove(voice.get_file_basename() + '.g.seg')
         os.remove(voice.get_file_basename() + '.s.seg')
